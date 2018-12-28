@@ -106,8 +106,7 @@ const createRandomCardsForPlayers = (arrayOfCards) => {
 
 const playCards = () => {
   // loop for play 3 cards 
-  let i = 0;
-  for (; i < 3; i++) {
+  for (let i = 0; i < 3; i++) {
       $(`#${i}th-player-card`).replaceWith(`<img src="${playerRandomCards[i].cardImage}"/>`);
       let playerDamage = playerRandomCards[i].damage; 
       let randNum = createRandomNumber(computerRandomCards);
@@ -122,48 +121,54 @@ const playCards = () => {
           roundsWon.computer++;
       } 
       displayResults();
-      // console.log(`Score of round ${round + 1}`); console.log(score);
-      // console.log(`Rounds Won round ${round + 1}`); console.log(roundsWon);
-
-      // let j = i + 1;
-      // // player's cards left in his hand
-      // if(j < playerRandomCards.length) {
-      //     console.log("Player's cards left: ");
-      //     for(j; j < playerRandomCards.length; j++) {
-      //         console.log(playerRandomCards[j]);
-      //     }
-
-      //     // computer's cards left in its hand
-      //     console.log("Computer's cards left: ");
-      //     for(let c = 0; c < computerRandomCards.length; c++) {
-      //         if(c != randNum) {
-      //             console.log(computerRandomCards[c]);
-      //         }
-      //     }
-      // }
   }
 }
 
 
 const game = () => {
     // create a for loop for round which is 3
-    for (let r = 0; r < 3; r++) {
-        // console.log(`Round: ${round + 1}`);
-        round++;
-        displayResults();
-        playCards();
-        playerRandomCards.length = 0;
-        computerRandomCards.length = 0;
-    }
+
+    // needs event handler
+    $('.pcard').click(function() {
+      let idOfCard = $(this).attr('id');
+      const index = parseInt(idOfCard.charAt(0));
+      $(this).hide();
+      $(this).replaceWith(`<img src="${playerRandomCards[index].cardImage}"/>`);
+
+
+      // $(`idOfCard`).replaceWith(`<img src="${playerRandomCards[index].cardImage}"/>`);
+
+      // if(e.target.tagName === "IMG") {
+ 
+        
+      //   // console.log($('e.target.tagName').attr('id'));;
+      //   const $idOfCard = $(e.target.tagName).attr('id');
+      //   // console.log($idOfCard);
+      //   // const index = $idOfCard.charAt(0);
+      //   // console.log(index);
+      //   // TO DO: find i th of image to replace with card 
+      // // $(`idOfCard`).replaceWith(`<img src="${playerRandomCards[1].cardImage}"/>`);
+      // }
+    });
+
+    
+    // for (let r = 0; r < 3; r++) {
+    //     // console.log(`Round: ${round + 1}`);
+    //     round++;
+    //     displayResults();
+    //     // playCards();
+    //     playerRandomCards.length = 0;
+    //     computerRandomCards.length = 0;
+    // }
 }
 
 const runGame = () => {
   displayGameCards();
   displayResults();
-    while(arrayOfCards.length > 0 && (arrayOfCards.length % 6 === 0 || arrayOfCards.length / 6 >= 1)){
+    // while(arrayOfCards.length > 0 && (arrayOfCards.length % 6 === 0 || arrayOfCards.length / 6 >= 1)){
        game();
-    }
-    alert("Game is over!!");
+    // }
+    // alert("Game is over!!");
 }
 
 const displayResults = () => {
@@ -180,9 +185,6 @@ const displayResults = () => {
     // runGame();
 }
 
-
-
-
 ////////////////////////////////Homework-W02D04////////////////////////////////
 
 const displayGameCards = () => {
@@ -192,12 +194,12 @@ const displayGameCards = () => {
   const $playerCards = $('<h3/>').text("Player Cards:");
   $('.displayGameCards').append($playerCards);
   for (let i = 0; i < 3; i++) {
-    $('.displayGameCards').append(`<img id="${i}th-player-card" src="images/Back.png"/>`);
+    $('.displayGameCards').append(`<img id="${i}th-player-card" class="pcard" src="images/Back.png"/>`);
   }
   const $computerCards = $('<h3/>').text("Computer Cards:");
   $('.displayGameCards').append($computerCards);
   for (let i = 0; i < 3; i++) {
-    $('.displayGameCards').append(`<img id="${i}th-computer-card" src="images/Back.png"/>`);
+    $('.displayGameCards').append(`<img id="${i}th-computer-card" class="ccard" src="images/Back.png"/>`);
   }
   // displayResults();
 }
