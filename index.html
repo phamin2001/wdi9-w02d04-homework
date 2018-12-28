@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>   
+    <title>Pokemon Game</title>   
+    <link rel="stylesheet" href="css/main.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+</head>
+<body>
+    <header>
+		<h1>Pokemon Game</h1>
+    </header>
+    <main>
+        <h2 class="Instructions">Instructions</h2>
+		<p>
+            You are going to play a simple card game in which a player will be able to battle the autoplayer. 
+            The game will deal 3 cards (each of which has a damage value) to the player and three cards to the 
+            autoplayer. The player will choose a card, and the computer will randomly choose a card, and whichever's 
+            card has the highest value will win the point. A round is finished once this has happened three times.
+        </p>
+        
+        <button class="showCards">Show Cards</button>
+        <button class="startGame">Start Game</button>
+
+        <body id="body">
+            <div class="displayCards"></div>
+           
+            <div class="displayGameCards"></div>
+        </body>
+  
+    </main>
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>
