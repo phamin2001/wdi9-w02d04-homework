@@ -73,8 +73,8 @@ let arrayOfCards = [
       cardImage: 'images/Weedle.png'
     }
   ];
-let round = 1;
-  const score = {
+let round = 0;
+const score = {
     player: 0,
     computer: 0
 }
@@ -83,7 +83,7 @@ const roundsWon = {
     computer: 0
 }
 
-  let playerRandomCards = [];     // each round it takes 3 unique cards
+let playerRandomCards = [];     // each round it takes 3 unique cards
 let computerRandomCards = [];   // each round it takes 3 unique cards
 
 const createRandomNumber = (array) => {
@@ -104,68 +104,80 @@ const createRandomCardsForPlayers = (arrayOfCards) => {
 }
 
 
+const playCards = () => {
+  // loop for play 3 cards 
+  let i = 0;
+  for (; i < 3; i++) {
+      $(`#${i}th-player-card`).replaceWith(`<img src="${playerRandomCards[i].cardImage}"/>`);
+      let playerDamage = playerRandomCards[i].damage; 
+      let randNum = createRandomNumber(computerRandomCards);
+      $(`#${i}th-computer-card`).replaceWith(`<img src="${computerRandomCards[i].cardImage}"/>`);
+      let computerDamage = computerRandomCards[randNum].damage; 
+      
+      if(playerDamage > computerDamage) {
+          score.player ++;
+          roundsWon.player++;
+      } else if(playerDamage < computerDamage){
+          score.computer++;
+          roundsWon.computer++;
+      } 
+      displayResults();
+      // console.log(`Score of round ${round + 1}`); console.log(score);
+      // console.log(`Rounds Won round ${round + 1}`); console.log(roundsWon);
+
+      // let j = i + 1;
+      // // player's cards left in his hand
+      // if(j < playerRandomCards.length) {
+      //     console.log("Player's cards left: ");
+      //     for(j; j < playerRandomCards.length; j++) {
+      //         console.log(playerRandomCards[j]);
+      //     }
+
+      //     // computer's cards left in its hand
+      //     console.log("Computer's cards left: ");
+      //     for(let c = 0; c < computerRandomCards.length; c++) {
+      //         if(c != randNum) {
+      //             console.log(computerRandomCards[c]);
+      //         }
+      //     }
+      // }
+  }
+}
+
+
 const game = () => {
-   
-
     // create a for loop for round which is 3
-    for (let round = 0; round < 3; round++) {
-        console.log(`Round: ${round + 1}`);
-        
-        // loop for play 3 cards 
-        let i = 0;
-        for (; i < 3; i++) {
-            console.log("Player card is: "); console.log(playerRandomCards[i]);
-            
-           
-            let playerDamage = playerRandomCards[i].damage; 
-            let randNum = createRandomNumber(computerRandomCards);
-            let computerDamage = computerRandomCards[randNum].damage; 
-            console.log("Computer card is: "); console.log(computerRandomCards[randNum]);
-            console.log("Player damage is: " + playerDamage);
-            console.log("Computer damage is: " + computerDamage);
-            
-            if(playerDamage > computerDamage) {
-                score.player ++;
-                roundsWon.player++;
-            } else if(playerDamage < computerDamage){
-                score.computer++;
-                roundsWon.computer++;
-            } 
-            console.log(`Score of round ${round + 1}`); console.log(score);
-            console.log(`Rounds Won round ${round + 1}`); console.log(roundsWon);
-
-            let j = i + 1;
-            // player's cards left in his hand
-            if(j < playerRandomCards.length) {
-                console.log("Player's cards left: ");
-                for(j; j < playerRandomCards.length; j++) {
-                    console.log(playerRandomCards[j]);
-                }
-
-                // computer's cards left in its hand
-                console.log("Computer's cards left: ");
-                for(let c = 0; c < computerRandomCards.length; c++) {
-                    if(c != randNum) {
-                        console.log(computerRandomCards[c]);
-                    }
-                }
-            }
-        }
-        
+    for (let r = 0; r < 3; r++) {
+        // console.log(`Round: ${round + 1}`);
+        round++;
+        displayResults();
+        playCards();
         playerRandomCards.length = 0;
         computerRandomCards.length = 0;
     }
 }
 
-const runTheGame = () => {
-    console.log(arrayOfCards.length);
-    $('#body').append(`<h4>Round: ${round}</h4>`);
-    $('#body').append(`<h4>fdfa</h4>`);
+const runGame = () => {
+  displayGameCards();
+  displayResults();
+    while(arrayOfCards.length > 0 && (arrayOfCards.length % 6 === 0 || arrayOfCards.length / 6 >= 1)){
+       game();
+    }
+    alert("Game is over!!");
+}
 
-    // while(arrayOfCards.length > 0 && (arrayOfCards.length % 6 === 0 || arrayOfCards.length / 6 >= 1)){
-    //    game();
-    // }
-    // alert("Game is over!!");
+const displayResults = () => {
+    // console.log(arrayOfCards.length);
+    $('.displayGameCards').prev().remove();
+    $('.displayGameCards').prev().remove();
+    $('.displayGameCards').prev().remove();
+    const $round = $(`<h4>Round: ${round}</h4>`);
+    $round.insertBefore('.displayGameCards');
+    const $score = $(`<h4>Score of Player: ${score.player}   Score of Computer: ${score.computer}</h4>`);
+    $score.insertBefore('.displayGameCards');
+    const $roundsWon = $(`<h4>Rounds of Won_Player: ${roundsWon.player} <<<<>>>>>  Rounds of Won_Computer: ${roundsWon.computer}</h4>`)
+    $roundsWon.insertBefore('.displayGameCards');
+    // runGame();
 }
 
 
@@ -173,21 +185,21 @@ const runTheGame = () => {
 
 ////////////////////////////////Homework-W02D04////////////////////////////////
 
-const displayGameCards = (e) => {
+const displayGameCards = () => {
   $('.displayCards').empty();
   $('.displayGameCards').empty();
   createRandomCardsForPlayers(arrayOfCards);
   const $playerCards = $('<h3/>').text("Player Cards:");
   $('.displayGameCards').append($playerCards);
   for (let i = 0; i < 3; i++) {
-    $('.displayGameCards').append(`<img src="images/Back.png"/>`);
+    $('.displayGameCards').append(`<img id="${i}th-player-card" src="images/Back.png"/>`);
   }
   const $computerCards = $('<h3/>').text("Computer Cards:");
   $('.displayGameCards').append($computerCards);
   for (let i = 0; i < 3; i++) {
-    $('.displayGameCards').append(`<img src="images/Back.png"/>`);
+    $('.displayGameCards').append(`<img id="${i}th-computer-card" src="images/Back.png"/>`);
   }
-  runTheGame();
+  // displayResults();
 }
 
 // show all cards at the begining of the game
@@ -205,7 +217,8 @@ $('.showCards').on('click', (e) => {
 
 // Start Game by selecting 3 random cards for user and 3 random cards for computer
 $('.startGame').on('click', (e) => {
-  displayGameCards(e);
+  // displayGameCards(e);
+  runGame();
 });
 
 
