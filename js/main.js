@@ -83,6 +83,7 @@ const roundsWon = {
     computer: 0
 }
 
+let arrayOfRandomNum = [];
 let playerRandomCards = [];     // each round it takes 3 unique cards
 let computerRandomCards = [];   // each round it takes 3 unique cards
 
@@ -105,51 +106,57 @@ const createRandomCardsForPlayers = (arrayOfCards) => {
 
 
 const playCards = () => {
-  // loop for play 3 cards 
-  for (let i = 0; i < 3; i++) {
-      $(`#${i}th-player-card`).replaceWith(`<img src="${playerRandomCards[i].cardImage}"/>`);
-      let playerDamage = playerRandomCards[i].damage; 
-      let randNum = createRandomNumber(computerRandomCards);
-      $(`#${i}th-computer-card`).replaceWith(`<img src="${computerRandomCards[i].cardImage}"/>`);
-      let computerDamage = computerRandomCards[randNum].damage; 
+  $('.pcard').click(function() {
+    let idOfCard = $(this).attr('id');
+    const index = parseInt(idOfCard.charAt(0));
+    let playerDamage = playerRandomCards[index].damage; 
+    $(this).hide();
+    $(this).replaceWith(`<img src="${playerRandomCards[index].cardImage}"/>`);
+
+    let randNum = createRandomNumber(computerRandomCards);
+    while (arrayOfRandomNum.length > 0 && (arrayOfRandomNum.includes(randNum))) {
+      randNum = createRandomNumber(computerRandomCards);
+    }
+    arrayOfRandomNum.push(randNum);
+    let computerDamage = computerRandomCards[randNum].damage; 
+    $(`#${randNum}th-computer-card`).replaceWith(`<img src="${computerRandomCards[randNum].cardImage}"/>`);    
+  });
+
+  
+
+  // $('.ccard').click(function() {
+  //   let idOfCard = $(this).attr('id');
+  //   const index = parseInt(idOfCard.charAt(0));
+  //   $(this).hide();
+  //   $(this).replaceWith(`<img src="${playerRandomCards[index].cardImage}"/>`);
+  // });
+
+  // for (let i = 0; i < 3; i++) {
+  //     $(`#${i}th-player-card`).replaceWith(`<img src="${playerRandomCards[i].cardImage}"/>`);
+  //     
+  //     let randNum = createRandomNumber(computerRandomCards);
+  //     $(`#${i}th-computer-card`).replaceWith(`<img src="${computerRandomCards[i].cardImage}"/>`);
+  //     let computerDamage = computerRandomCards[randNum].damage; 
       
-      if(playerDamage > computerDamage) {
-          score.player ++;
-          roundsWon.player++;
-      } else if(playerDamage < computerDamage){
-          score.computer++;
-          roundsWon.computer++;
-      } 
-      displayResults();
-  }
+  //     if(playerDamage > computerDamage) {
+  //         score.player ++;
+  //         roundsWon.player++;
+  //     } else if(playerDamage < computerDamage){
+  //         score.computer++;
+  //         roundsWon.computer++;
+  //     } 
+  //     displayResults();
+  // }
 }
 
 
 const game = () => {
     // create a for loop for round which is 3
+    // for (let r = 0; r < 3; r++) {
+      playCards();
+    // }
 
-    // needs event handler
-    $('.pcard').click(function() {
-      let idOfCard = $(this).attr('id');
-      const index = parseInt(idOfCard.charAt(0));
-      $(this).hide();
-      $(this).replaceWith(`<img src="${playerRandomCards[index].cardImage}"/>`);
-
-
-      // $(`idOfCard`).replaceWith(`<img src="${playerRandomCards[index].cardImage}"/>`);
-
-      // if(e.target.tagName === "IMG") {
- 
-        
-      //   // console.log($('e.target.tagName').attr('id'));;
-      //   const $idOfCard = $(e.target.tagName).attr('id');
-      //   // console.log($idOfCard);
-      //   // const index = $idOfCard.charAt(0);
-      //   // console.log(index);
-      //   // TO DO: find i th of image to replace with card 
-      // // $(`idOfCard`).replaceWith(`<img src="${playerRandomCards[1].cardImage}"/>`);
-      // }
-    });
+   
 
     
     // for (let r = 0; r < 3; r++) {
