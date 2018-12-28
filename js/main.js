@@ -83,6 +83,8 @@ const roundsWon = {
     computer: 0
 }
 
+let numberOfCardsPlayed = 0;
+
 let arrayOfRandomNum = [];
 let playerRandomCards = [];     // each round it takes 3 unique cards
 let computerRandomCards = [];   // each round it takes 3 unique cards
@@ -106,7 +108,12 @@ const createRandomCardsForPlayers = (arrayOfCards) => {
 
 
 const playCards = () => {
+  displayGameCards();
+  displayResults();
+
   $('.pcard').click(function() {
+    numberOfCardsPlayed++;
+    console.log( `number of cars played in playCards: ${numberOfCardsPlayed}`);
     let idOfCard = $(this).attr('id');
     const index = parseInt(idOfCard.charAt(0));
     let playerDamage = playerRandomCards[index].damage; 
@@ -119,63 +126,37 @@ const playCards = () => {
     }
     arrayOfRandomNum.push(randNum);
     let computerDamage = computerRandomCards[randNum].damage; 
-    $(`#${randNum}th-computer-card`).replaceWith(`<img src="${computerRandomCards[randNum].cardImage}"/>`);    
+    $(`#${randNum}th-computer-card`).replaceWith(`<img src="${computerRandomCards[randNum].cardImage}"/>`); 
+    
+    if(playerDamage > computerDamage) {
+      score.player ++;
+      roundsWon.player++;
+    } else if(playerDamage < computerDamage){
+      score.computer++;
+      roundsWon.computer++;
+    } 
+    displayResults();
+
+    if(numberOfCardsPlayed === 3) {
+      round++;
+      playerRandomCards.length = 0;
+      computerRandomCards.length = 0;
+      numberOfCardsPlayed = 0;
+    }
   });
-
-  
-
-  // $('.ccard').click(function() {
-  //   let idOfCard = $(this).attr('id');
-  //   const index = parseInt(idOfCard.charAt(0));
-  //   $(this).hide();
-  //   $(this).replaceWith(`<img src="${playerRandomCards[index].cardImage}"/>`);
-  // });
-
-  // for (let i = 0; i < 3; i++) {
-  //     $(`#${i}th-player-card`).replaceWith(`<img src="${playerRandomCards[i].cardImage}"/>`);
-  //     
-  //     let randNum = createRandomNumber(computerRandomCards);
-  //     $(`#${i}th-computer-card`).replaceWith(`<img src="${computerRandomCards[i].cardImage}"/>`);
-  //     let computerDamage = computerRandomCards[randNum].damage; 
-      
-  //     if(playerDamage > computerDamage) {
-  //         score.player ++;
-  //         roundsWon.player++;
-  //     } else if(playerDamage < computerDamage){
-  //         score.computer++;
-  //         roundsWon.computer++;
-  //     } 
-  //     displayResults();
-  // }
 }
 
 
 const game = () => {
-    // create a for loop for round which is 3
-    // for (let r = 0; r < 3; r++) {
-      playCards();
-    // }
-
-   
-
-    
-    // for (let r = 0; r < 3; r++) {
-    //     // console.log(`Round: ${round + 1}`);
-    //     round++;
-    //     displayResults();
-    //     // playCards();
-    //     playerRandomCards.length = 0;
-    //     computerRandomCards.length = 0;
-    // }
+  playCards();
 }
 
 const runGame = () => {
-  displayGameCards();
-  displayResults();
-    // while(arrayOfCards.length > 0 && (arrayOfCards.length % 6 === 0 || arrayOfCards.length / 6 >= 1)){
-       game();
-    // }
-    // alert("Game is over!!");
+  if(round === 3) {
+    alert("game over");
+  } else {
+    game();
+  }
 }
 
 const displayResults = () => {
@@ -189,15 +170,14 @@ const displayResults = () => {
     $score.insertBefore('.displayGameCards');
     const $roundsWon = $(`<h4>Rounds of Won_Player: ${roundsWon.player} <<<<>>>>>  Rounds of Won_Computer: ${roundsWon.computer}</h4>`)
     $roundsWon.insertBefore('.displayGameCards');
-    // runGame();
 }
 
-////////////////////////////////Homework-W02D04////////////////////////////////
 
 const displayGameCards = () => {
   $('.displayCards').empty();
   $('.displayGameCards').empty();
   createRandomCardsForPlayers(arrayOfCards);
+  console.log(`arrayofcards: `); console.log(arrayOfCards);
   const $playerCards = $('<h3/>').text("Player Cards:");
   $('.displayGameCards').append($playerCards);
   for (let i = 0; i < 3; i++) {
@@ -208,7 +188,6 @@ const displayGameCards = () => {
   for (let i = 0; i < 3; i++) {
     $('.displayGameCards').append(`<img id="${i}th-computer-card" class="ccard" src="images/Back.png"/>`);
   }
-  // displayResults();
 }
 
 // show all cards at the begining of the game
@@ -226,11 +205,5 @@ $('.showCards').on('click', (e) => {
 
 // Start Game by selecting 3 random cards for user and 3 random cards for computer
 $('.startGame').on('click', (e) => {
-  // displayGameCards(e);
   runGame();
 });
-
-
-
-
-
